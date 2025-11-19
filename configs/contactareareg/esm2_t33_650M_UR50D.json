@@ -1,0 +1,153 @@
+{
+  "trainset_config": {
+    "data_path": "data/train.csv",
+    "embedding_path": "embeddings/esm2_t33_650M_UR50D/",
+    "embedding_keys": [
+      "tcr.a.cdr3.aa",
+      "tcr.b.cdr3.aa",
+      "epi.aa"
+    ],
+    "concept_keys": [
+    ],
+    "label_keys": [
+      "lab.binder"
+    ],
+    "mapping": {
+      "lab.binder": "labels",
+      "tcr.a.cdr3.aa.hidden.states": "hidden_states_a",
+      "tcr.a.cdr3.aa.attention.mask": "attention_mask_a",
+      "tcr.b.cdr3.aa.hidden.states": "hidden_states_b",
+      "tcr.b.cdr3.aa.attention.mask": "attention_mask_b",
+      "epi.aa.hidden.states": "hidden_states_e",
+      "epi.aa.attention.mask": "attention_mask_e"
+    },
+    "batch_size": 512,
+    "shuffle": true,
+    "num_workers": 8
+  },
+  "testset_config": {
+    "data_path": "data/test.csv",
+    "embedding_path": "embeddings/esm2_t33_650M_UR50D/",
+    "embedding_keys": [
+      "tcr.a.cdr3.aa",
+      "tcr.b.cdr3.aa",
+      "epi.aa"
+    ],
+    "concept_keys": [
+    ],
+    "label_keys": [
+      "lab.binder"
+    ],
+    "mapping": {
+      "lab.binder": "labels",
+      "tcr.a.cdr3.aa.hidden.states": "hidden_states_a",
+      "tcr.a.cdr3.aa.attention.mask": "attention_mask_a",
+      "tcr.b.cdr3.aa.hidden.states": "hidden_states_b",
+      "tcr.b.cdr3.aa.attention.mask": "attention_mask_b",
+      "epi.aa.hidden.states": "hidden_states_e",
+      "epi.aa.attention.mask": "attention_mask_e"
+    },
+    "batch_size": 512,
+    "shuffle": false,
+    "num_workers": 8
+  },
+  "regset_config": {
+    "data_path": "data/TCRXAI/55/train.json",
+    "embedding_path": "embeddings/tcrxai/esm2_t33_650M_UR50D/",
+    "embedding_keys": [
+      "tcr.a.cdr3.aa",
+      "tcr.b.cdr3.aa",
+      "epi.aa"
+    ],
+    "concept_keys": [
+    ],
+    "label_keys": [
+      "lab.binder",
+      "lab.cm.epi.cdr3a",
+      "lab.cm.epi.cdr3b",
+      "lab.resolution"
+    ],
+    "mapping": {
+      "lab.binder": "labels",
+      "tcr.a.cdr3.aa.hidden.states": "hidden_states_a",
+      "tcr.a.cdr3.aa.attention.mask": "attention_mask_a",
+      "tcr.b.cdr3.aa.hidden.states": "hidden_states_b",
+      "tcr.b.cdr3.aa.attention.mask": "attention_mask_b",
+      "epi.aa.hidden.states": "hidden_states_e",
+      "epi.aa.attention.mask": "attention_mask_e",
+      "lab.cm.epi.cdr3a": "labels_contact_map_ae",
+      "lab.cm.epi.cdr3b": "labels_contact_map_be",
+      "lab.resolution": "lab_resolution"
+    },
+    "batch_size": 16,
+    "shuffle": true,
+    "num_workers": 8
+  },
+  "model_configs": {
+    "model_name": "ContactAreaRegularizeClassifier",
+    "model_config": {
+      "sample_distances": [
+        0.8,
+        0.85,
+        0.9,
+        0.95
+      ],
+      "num_heads": 1,
+      "dropout": 0.2,
+      "chain_weights": "max",
+      "label_balance": [0.2175, 0.7825],
+      "regular_top_k": 0.8,
+      "regular_with_binding": true
+    },
+    "optimizer_name": "adamw",
+    "optimizer_config": {
+      "lr": 0.0001
+    },
+    "training_config": {
+      "epoch": 150,
+      "save_path": "experiments/esm2_t33_650M_UR50D",
+      "save_per": null
+    },
+    "device": "cpu",
+    "tqdm_bar": true
+  },
+  "reg_config": {
+    "optimizer_name": "adamw",
+    "optimizer_config": {
+      "lr": 0.0001
+    },
+    "epoch": 5
+  },
+  "eval_config": {
+    "epiwise_roc_auc": [
+      "epiwise_roc_auc",
+      {}
+    ],
+    "epiwise_roc_auc_10": [
+      "epiwise_roc_auc",
+      {
+        "max_fpr": 0.1
+      }
+    ],
+    "forward": [
+      "forward",
+      {}
+    ]
+  },
+  "eval_train_config": {
+    "roc_auc": [
+      "roc_auc",
+      {}
+    ],
+    "roc_auc_10": [
+      "roc_auc",
+      {
+        "max_fpr": 0.1
+      }
+    ]
+  },
+  "test_config": {
+    "weights": "last",
+    "save_path": "experiments/esm2_t33_650M_UR50D"
+  }
+}
